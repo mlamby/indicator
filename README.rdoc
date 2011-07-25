@@ -86,7 +86,47 @@ A list of outputs that an indicator run function returns can be retrieved using 
   => [:out_macd, :out_macd_signal, :out_macd_hist]
 
 === Data Mapping
+The run function also accepts a DataMapping::Map structure which can be used to extract data from an enumerable collection.
 
+  # Assume historical_data is a list of hashes with the following keys
+  # :open, :high, :low, :close, :volume
+  sma = Sma.new 5
+  sma_results = sma.run(DataMapper::Map.new(historical_data, :open))
+
+When the above example is run the DataMapper will attempt to extract data from the historical_data collection by either calling a function called open or retrieving a hash value using the key :open. You can also directly pass in a lambda function if a more complex mapping function is required.
+To reduce the amount of code required a helper function called new_map is available:
+
+  sma = Sma.new 5
+  sma_results = sma.run new_map(historical_data, :open)
+  sma_results = sma.run new_map(historical_data, lambda => |b| { b[:open] / 2 })
+
+By default the run function will attempt to use a default getter of :open, so the following is also valid:
+  
+  sma = Sma.new 5
+  sma_results = sma.run historical_data 
+  # Calculates the sma by accessing [:open] on each element of historical_data
+
+The default getter can be changed:
+  sma = Sma.new 5
+  sma.default_getter :high
+  sma_results = sma.run historical_data 
+  # Calculates the sma by accessing [:high] on each element of historical_data
+
+The same mapping system works for functions requiring price data as an input. The AvgPrice function can be called using either of the following syntax:
+  
+  ap = AvgPrice.new
+  ap.run(
+    new_map(historical_data, :open), 
+    new_map(historical_data, :high), 
+    new_map(historical_data, :low), 
+    new_map(historical_data, :close))
+
+or
+
+  ap = AvgPrice.new
+  ap.run historical_data
+
+The run function will again attempt to use sensible default mappings of :open, :high, :low, :close and :volume (if required).
 
 == Copyright
 
