@@ -14,7 +14,7 @@ Requires the talib-ruby gem. The examples require the yahoofinance gem.
 
   require 'indicator'
 
-The base Indicator functions are located in the Indicator module and the auto generated classed are located in the Indicator::AutoGen module. All of the following examples assume this module has been included:
+The base Indicator functions are located in the Indicator module and the auto generated classed are located in the Indicator::AutoGen module. All of the following examples assume these modules have been included:
 
   include Indicator
   include Indicator::AutoGen
