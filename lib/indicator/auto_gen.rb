@@ -1,3 +1,8 @@
+module Indicator
+  module AutoGen
+  end
+end
+
 require 'indicator\auto_gen\acos'
 require 'indicator\auto_gen\ad'
 require 'indicator\auto_gen\add'

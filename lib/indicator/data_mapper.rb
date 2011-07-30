@@ -1,91 +1,93 @@
-module DataMapper
+module Indicator
+  module DataMapper
 
-  class SourceMustBeEnumerable < StandardError
-  end
-
-  class InvalidMapping < StandardError
-  end
-
-  Map = Struct.new(:source, :getter)
-
-  def default_getter
-    @default_getter || :close
-  end
-
-  def default_getter= v
-    @default_getter = v
-  end
-
-  def map ds, getter=default_getter
-
-    return nil unless ds
-
-    # ds can be supplied as an array of [source, mapping] or simply
-    # the source
-    if ds.is_a? Map
-      source = ds.source
-      mapping = ds.getter
-    else
-      source = ds
+    class SourceMustBeEnumerable < StandardError
     end
- 
-    raise SourceMustBeEnumerable unless source.is_a? Enumerable
-    raise ArgumentError unless getter
 
-    # Return nil straight away if the data source is empty. The
-    # downstream ta-lib functions can handle a nil argument.
-    return nil unless source.length > 0
+    class InvalidMapping < StandardError
+    end
 
-    # No need to go any further if no mapping was specified and
-    # the specified data source responds to 'to_f'.
-    element = source.first
-    return source if element.respond_to?(:to_f) and mapping.nil?
+    Map = Struct.new(:source, :getter)
 
-    mapping ||= getter
-    mapping_sym = mapping.to_sym rescue nil
+    def default_getter
+      @default_getter || :close
+    end
 
-    # Figure out how to use the mapping value.
-    # It can either be a directly callable mapping, a function name
-    # or a hash index.
-    map_proc =
-      if mapping.respond_to? :call
-        mapping
+    def default_getter= v
+      @default_getter = v
+    end
+
+    def map ds, getter=default_getter
+
+      return nil unless ds
+
+      # ds can be supplied as an array of [source, mapping] or simply
+      # the source
+      if ds.is_a? Map
+        source = ds.source
+        mapping = ds.getter
       else
-        if not mapping_sym.nil? and element.respond_to?(mapping_sym)
-          mapping_sym.to_proc
-        elsif element.respond_to?(:[])
-          ->(e) { e[mapping] }
-        end
+        source = ds
       end
 
-    raise InvalidMapping unless map_proc
+      raise SourceMustBeEnumerable unless source.is_a? Enumerable
+      raise ArgumentError unless getter
 
-    # Returned the mapped data
-    source.collect { |e| map_proc.call(e) }
-  end
+      # Return nil straight away if the data source is empty. The
+      # downstream ta-lib functions can handle a nil argument.
+      return nil unless source.length > 0
 
-  def map_ohlcv volume_required, *args
+      # No need to go any further if no mapping was specified and
+      # the specified data source responds to 'to_f'.
+      element = source.first
+      return source if element.respond_to?(:to_f) and mapping.nil?
 
-    raise ArgumentError unless args.length > 0
-    first = args.first
+      mapping ||= getter
+      mapping_sym = mapping.to_sym rescue nil
 
-    types = [:open, :high, :low, :close]
-    types << :volume if volume_required
+      # Figure out how to use the mapping value.
+      # It can either be a directly callable mapping, a function name
+      # or a hash index.
+      map_proc =
+        if mapping.respond_to? :call
+          mapping
+        else
+          if not mapping_sym.nil? and element.respond_to?(mapping_sym)
+            mapping_sym.to_proc
+          elsif element.respond_to?(:[])
+            ->(e) { e[mapping] }
+          end
+        end
 
-    l = types.inject([]) do |lst, t|
-      a = args.shift
-      lst << (a ? map(a, t) : map(first, t)) 
+      raise InvalidMapping unless map_proc
+
+      # Returned the mapped data
+      source.collect { |e| map_proc.call(e) }
     end
 
-    # Push a nil in the place of the volume data series
-    # if it hasn't been requested
-    l << nil unless volume_required
+    def map_ohlcv volume_required, *args
 
-    # Push the length onto the end of the array
-    l << first.length
+      raise ArgumentError unless args.length > 0
+      first = args.first
+
+      types = [:open, :high, :low, :close]
+      types << :volume if volume_required
+
+      l = types.inject([]) do |lst, t|
+        a = args.shift
+        lst << (a ? map(a, t) : map(first, t)) 
+      end
+
+      # Push a nil in the place of the volume data series
+      # if it hasn't been requested
+      l << nil unless volume_required
+
+      # Push the length onto the end of the array
+      l << first.length
+    end
   end
 end
 
 def new_map(ds, map)
-  DataMapper::Map.new(ds, map)
+  Indicator::DataMapper::Map.new(ds, map)
 end

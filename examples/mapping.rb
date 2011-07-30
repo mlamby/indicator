@@ -2,6 +2,9 @@
 require 'yahoofinance'
 require 'indicator'
 
+include Indicator
+include Indicator::AutoGen
+
 def bar_to_hash r
   h = {}
   h[:date] = Date.parse(r[0])

@@ -14,6 +14,11 @@ Requires the talib-ruby gem. The examples require the yahoofinance gem.
 
   require 'indicator'
 
+The base Indicator functions are located in the Indicator module and the auto generated classed are located in the Indicator::AutoGen module. All of the following examples assume this module has been included:
+
+  include Indicator
+  include Indicator::AutoGen
+
 === Class Construction
 
 All ta-lib functions are wrapped in a class named using the camel class name of the function: SMA is Sma, AVGPRICE is AvgPrice, etc. The constructor takes the optional arguments either as a hash or argument list. For example the Macd class takes three arguments, fast_period, slow_period and signal_period. They can be initialised in any of the following ways:
