@@ -3,5 +3,5 @@ require 'indicator/data_mapper'
 require 'indicator/auto_gen'
 
 module Indicator
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
 end

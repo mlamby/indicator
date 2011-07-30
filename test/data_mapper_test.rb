@@ -1,5 +1,7 @@
 require 'minitest/autorun'
-require 'ta_indicator'
+require 'indicator'
+
+include Indicator
 
 class DataMapperTest < MiniTest::Unit::TestCase
   class Bar
