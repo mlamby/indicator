@@ -4,7 +4,7 @@ require 'indicator/base'
 require 'indicator/auto_gen'
 
 module Indicator
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
   
   class UnknownIndicator < StandardError
   end
