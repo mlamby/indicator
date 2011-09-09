@@ -2,9 +2,6 @@
 require 'yahoofinance'
 require 'indicator'
 
-include Indicator
-include Indicator::AutoGen
-
 def bar_to_hash r
   h = {}
   h[:date] = Date.parse(r[0])
@@ -24,18 +21,18 @@ puts 'Retrieving historical data'
 cba = get_data_100("CBA.AX").inject([]) { |lst, q| lst << bar_to_hash(q) }
 nab = get_data_100("NAB.AX").inject([]) { |lst, q| lst << bar_to_hash(q) }
 
-sma = Sma.new(13)
-sma_results = sma.run(DataMapper::Map.new(cba, :open))
+sma = Indicator.create_named :sma_13
+sma_results = sma.run(Indicator::DataMapper::Map.new(cba, :open))
 
-ema = Ema.new(25)
+ema = Indicator.create_named :ema_25
 ema.default_getter = :high
 ema_results = sma.run cba
 
-sub = Sub.new
+sub = Indicator.create :sub
 sub.default_getter = :low
 sub_results = sub.run cba, nab
 
-adx = Adx.new
+adx = Indicator.create :adx
 adx_results = adx.run(
   new_map(nab, :open), 
   new_map(nab, :high), 
