@@ -22,7 +22,7 @@ The easiest way to use the indicator library is to include the indicator mixin m
   results = data.indicator(:sma, 5)
   results = data.indicator(:sma_5)
 
-All produce the same results:
+All perform a simple moving average with time period of 5 and produce the same results:
 
   => [nil, nil, nil, nil, 2.2, 2.4, 2.6, 2.4, 2.6, 2.4, 2.6]
 
