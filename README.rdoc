@@ -191,6 +191,6 @@ The gen_wrapper.rb script uses the erb library to generate code from the defined
 
 == Copyright
 
-Copyright (c) 2011 Michael Lamb. See LICENSE for details.
+Copyright (c) 2012 Michael Lamb. See LICENSE for details.
 
 The files ta_func_api.xml and ta_func_api.xsd are from the talib library. The license details are contained within LICENSE-ta-lib.
