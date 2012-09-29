@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 require 'indicator/version'
 
 Gem::Specification.new do |s|
-  s.name = 'indicator'
+  s.name = 'ta-indicator'
   s.version = Indicator::VERSION
 
   s.summary = 'Technical Analysis library'
