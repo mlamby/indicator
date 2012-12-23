@@ -65,26 +65,6 @@ module Indicator
       source.collect { |e| map_proc.call(e) }
     end
 
-    def map_ohlcv volume_required, *args
-
-      raise ArgumentError unless args.length > 0
-      first = args.first
-
-      types = [:open, :high, :low, :close]
-      types << :volume if volume_required
-
-      l = types.inject([]) do |lst, t|
-        a = args.shift
-        lst << (a ? map(a, t) : map(first, t)) 
-      end
-
-      # Push a nil in the place of the volume data series
-      # if it hasn't been requested
-      l << nil unless volume_required
-
-      # Push the length onto the end of the array
-      l << first.length
-    end
   end
 end
 

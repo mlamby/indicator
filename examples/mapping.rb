@@ -13,6 +13,16 @@ def bar_to_hash r
   h
 end
 
+def short_hash r
+  h = {}
+  h[:date] = r[:date]
+  h[:high] = r[:high]
+  h[:low] = r[:low]
+  h[:close] = r[:close]
+  h[:volume] = r[:volume]
+  h
+end
+
 def get_data_100 ticker
   YahooFinance::get_historical_quotes_days(ticker, 100)
 end
@@ -20,6 +30,7 @@ end
 puts 'Retrieving historical data'
 cba = get_data_100("CBA.AX").inject([]) { |lst, q| lst << bar_to_hash(q) }
 nab = get_data_100("NAB.AX").inject([]) { |lst, q| lst << bar_to_hash(q) }
+nab_no_open = nab.inject([]) { |lst, q| lst << short_hash(q) }
 
 sma = Indicator.create_named :sma_13
 sma_results = sma.run(Indicator::DataMapper::Map.new(cba, :open))
@@ -31,6 +42,10 @@ ema_results = sma.run cba
 sub = Indicator.create :sub
 sub.default_getter = :low
 sub_results = sub.run cba, nab
+
+stoch = Indicator.create :stoch
+stoch_results = stoch.run nab
+stoch_results = stoch.run nab_no_open
 
 adx = Indicator.create :adx
 adx_results = adx.run(

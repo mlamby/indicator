@@ -26,9 +26,9 @@ class FinancialFunction
 
   attr_reader :name, :camel_name, :desc, :group_id
   attr_reader :inputs, :outputs, :arguments
-  attr_reader :bar_input, :bar_type
+  attr_reader :bar_input
   def initialize e
-    bar_names = ['open', 'high', 'low', 'close', 'volume']
+    bar_names = ['open', 'high', 'low', 'close']
     @name = get_text e, 'Abbreviation'
     @camel_name = get_text e, 'CamelCaseName'
     @desc = get_text e, 'ShortDescription'
@@ -68,15 +68,14 @@ class FinancialFunction
   end
 
   def map_bar_inputs
-    @bar_type = has_bar_input('volume') ? :ohlcv : :ohlc
-
-    @inputs = []
     @index = 0
-    @inputs << create_bar_input('open')
-    @inputs << create_bar_input('high')
-    @inputs << create_bar_input('low')
-    @inputs << create_bar_input('close')
-    @inputs << create_bar_input('volume') if @bar_type == :ohlcv
+    lst = []
+    lst << create_bar_input('open') if has_bar_input('open')
+    lst << create_bar_input('high') if has_bar_input('high')
+    lst << create_bar_input('low') if has_bar_input('low')
+    lst << create_bar_input('close') if has_bar_input('close')
+    lst << create_bar_input('volume') if has_bar_input('volume')
+    @inputs = lst
   end
 
   def has_bar_input name
@@ -149,7 +148,7 @@ template = ERB.new(text,nil,'<>')
 # Generate code for each function
 functions.each do |f|
   f_name = "../lib/indicator/auto_gen/#{f.camel_name.underscore}.rb"
-  puts "Creating file #{f_name}"
+  #puts "Creating file #{f_name}"
   File.open(f_name, 'w') do |fout| 
     fout.write template.result(f.get_binding)
   end

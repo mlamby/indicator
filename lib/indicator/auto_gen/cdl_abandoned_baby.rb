@@ -38,7 +38,7 @@ class Indicator::AutoGen::CdlAbandonedBaby < Indicator::Base
   end
 
   def run(*args)
-    o, h, l, c, v, len = map_ohlcv(false, *args)
+    o, h, l, c, v, len = map_ohlcv(self.class.inputs, *args)
     @func.in_price(0, o, h, l, c, v, nil)
 
     @func.opt_real(0, @penetration)
