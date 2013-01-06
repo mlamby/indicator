@@ -78,7 +78,7 @@ The Indicator module also supports factory style functions to simplify class cre
 If a indicator is to be constructed using only integer parameters then an indicator can be constructed using the create_named factory function. The create_named function expects the indicator name optionally followed by it's arguments joined by an underscore.
 
  sma = Indicator.create_named :sma_5
- macd = Indicator.create_named :sma_12_26_9
+ macd = Indicator.create_named :macd_12_26_9
 
 === Argument attributes
 
