@@ -43,7 +43,7 @@ The list of available indicators can be retrieved via
 Information about each indicator including a list of arguments can be retrieved via:
   
   Indicator.info :sma
-  Inficator.info :macd
+  Indicator.info :macd
   ... 
 
 == Details 
