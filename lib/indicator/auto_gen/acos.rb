@@ -30,7 +30,7 @@ class Indicator::AutoGen::Acos < Indicator::Base
   end
 
   def run(in_real)
-    len = in_real.length
+    len = map(in_real).length
     @func.in_real(0, map(in_real))
 
 

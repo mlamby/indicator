@@ -42,7 +42,7 @@ class Indicator::AutoGen::Mama < Indicator::Base
   end
 
   def run(in_real)
-    len = in_real.length
+    len = map(in_real).length
     @func.in_real(0, map(in_real))
 
     @func.opt_real(0, @fast_limit)

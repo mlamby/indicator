@@ -30,7 +30,7 @@ class Indicator::AutoGen::Div < Indicator::Base
   end
 
   def run(in_real0, in_real1)
-    len = in_real0.length
+    len = map(in_real0).length
     @func.in_real(0, map(in_real0))
     @func.in_real(1, map(in_real1))
 
